@@ -2,7 +2,12 @@ import { model, Schema } from "mongoose";
 
 const patientSchema = new Schema(
   {
-    labId: { type: Schema.Types.ObjectId, ref: "lab", required: true },
+    labId: {
+      type: Schema.Types.ObjectId,
+      ref: "lab",
+      required: true,
+      index: true,
+    },
     patientName: { type: String, required: true },
     gender: {
       type: String,

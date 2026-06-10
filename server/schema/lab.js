@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const labSchema = new Schema(
   {
-    labAdmin: { type: Schema.Types.ObjectId, ref: "labAdmin", required: true },
+    labAdmin: { type: Schema.Types.ObjectId, ref: "labAdmin", required: true, index:true },
     labName: { type: String, required: [true, "Lab name is required"] },
     contact: { type: String, required: [true, "Lab contact is required"] },
     email: { type: String, required: false },

@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const labUserSchema = new Schema(
   {
-    labId: { type: Schema.Types.ObjectId, ref: "lab", required: true },
+    labId: { type: Schema.Types.ObjectId, ref: "lab", required: true , index:true},
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },

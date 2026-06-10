@@ -2,7 +2,12 @@ import { model, Schema } from "mongoose";
 
 const billSchema = new Schema(
   {
-    labId: { type: Schema.Types.ObjectId, ref: "lab", required: true },
+    labId: {
+      type: Schema.Types.ObjectId,
+      ref: "lab",
+      required: true,
+      index: true,
+    },
     patientId: { type: Schema.Types.ObjectId, ref: "Patient", required: true },
     totalAmount: { type: Number, required: true },
     paidAmount: { type: Number, required: true },

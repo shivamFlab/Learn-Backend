@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { labAdminModel } from "../../server/schema/labAdmin.js";
 
 const getLabAdminLabs = async (req, res) => {
@@ -7,48 +8,56 @@ const getLabAdminLabs = async (req, res) => {
         from: "labs",
         localField: "_id",
         foreignField: "labAdmin",
-        as: "adminLabs",
+        as: "Labs",
         pipeline: [
           {
             $lookup: {
               from: "labusers",
               localField: "_id",
               foreignField: "labId",
-              as: "labUsers",
+              as: "labUserData",
+            },
+          },
+          {
+            $addFields: {
+              labUsersCount: {
+                $size: "$labUserData",
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: "bills",
+              localField: "_id",
+              foreignField: "labId",
+              as: "labBillData",
               pipeline: [
                 {
                   $project: {
-                    labId: 1,
-                    name: 1,
-                    role: 1,
+                    patientId: 1,
+                    totalAmount: 1,
+                    paidAmount: 1,
+                    dueAmount: 1,
+                    status: 1,
                   },
                 },
               ],
             },
           },
           {
-            $lookup: {
-              from: "patients",
-              localField: "_id",
-              foreignField: "labId",
-              as: "labPatients",
-              pipeline: [
-                {
-                  $project: {
-                    labId: 1,
-                    patientName: 1,
-                    gender: 1,
-                  },
-                },
-              ],
+            $addFields: {
+              totalBillCount: {
+                $size: "$labBillData",
+              },
             },
           },
           {
             $project: {
               labName: 1,
-              email: 1,
-              labUsers: 1,
-              labPatients: 1,
+              // labUserData: 1,
+              labUsersCount: 1,
+              // labBillData: 1,
+              totalBillCount: 1,
             },
           },
         ],
@@ -57,9 +66,8 @@ const getLabAdminLabs = async (req, res) => {
     {
       $project: {
         name: 1,
-        isActive: 1,
         role: 1,
-        adminLabs: 1,
+        Labs: 1,
       },
     },
   ]);
