@@ -16,7 +16,6 @@ function verifyToken(req, res, next) {
     console.log({ decoded });
     req.labAdminId = decoded?.labAdminId;
     req.labId = decoded?.labId;
-    // req.role = decoded?.role;
 
     next();
   } catch (err) {

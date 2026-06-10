@@ -74,4 +74,66 @@ const updateLab = async (req, res) => {
   }
 };
 
-export { createLab, updateLab, createLabNewLab };
+const getMyLabs = async (req, res) => {
+  try {
+    const labs = await labModel.find({ labAdmin: req?.labAdminId });
+
+    return res.status(200).json({
+      success: true,
+      message: "Labs fetched successfully",
+      data: labs,
+    });
+  } catch (error) {
+    console.error("getMyLabs error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching labs , please try again",
+    });
+  }
+};
+
+const switchLab = async (req, res) => {
+  try {
+    const { labId } = req.body;
+
+    if (!labId) {
+      return res.status(400).json({
+        success: false,
+        message: "labId is required",
+      });
+    }
+
+    const lab = await labModel.findOne({
+      _id: labId,
+      labAdmin: req?.labAdminId,
+    });
+
+    if (!lab) {
+      return res.status(403).json({
+        success: false,
+        message: "Lab not found or you do not have access to it",
+      });
+    }
+
+    const token = signToken({
+      _id: lab._id,
+      labAdmin: lab.labAdmin,
+      role: "labAdmin",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Active lab switched successfully",
+      data: lab,
+      token,
+    });
+  } catch (error) {
+    console.error("switchLab error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while switching lab , please try again",
+    });
+  }
+};
+
+export { createLab, updateLab, createLabNewLab, getMyLabs, switchLab };

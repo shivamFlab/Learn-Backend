@@ -7,7 +7,6 @@ import { labUserRouter } from "./server/routes/labUser/labUser.js";
 import { patientRouter } from "./server/routes/patient/patient.js";
 import { testRouter } from "./server/routes/test/test.js";
 import { billRouter } from "./server/routes/bill/bill.js";
-import { verifyToken } from "./server/middleware/verifyToken.js";
 
 export function createApp() {
   const app = express();
