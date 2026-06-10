@@ -1,18 +1,11 @@
-import express from 'express'
-import { connectDB } from './config/dbConnection.js';
-import dotenv from 'dotenv'
+import { connectDB } from "./config/dbConnection.js";
+import dotenv from "dotenv";
+import { createApp } from "./appFactory.js";
 
-const app = express();
 dotenv.config();
 
-
+const app = createApp();
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({ message: "Server is running" });
-});
 
 try {
   await connectDB(process.env.MONGODB_URI);
